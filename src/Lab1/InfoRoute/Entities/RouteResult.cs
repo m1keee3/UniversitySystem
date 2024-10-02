@@ -1,4 +1,4 @@
-﻿namespace Itmo.ObjectOrientedProgramming.Lab1;
+﻿namespace Itmo.ObjectOrientedProgramming.Lab1.InfoRoute.Entities;
 
 public class RouteResult(bool success, double time)
 {

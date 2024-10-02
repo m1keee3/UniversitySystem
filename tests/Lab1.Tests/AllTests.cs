@@ -1,5 +1,6 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab1;
-
+﻿using Itmo.ObjectOrientedProgramming.Lab1.InfoRoute.Entities;
+using Itmo.ObjectOrientedProgramming.Lab1.InfoRoute.Models;
+using Itmo.ObjectOrientedProgramming.Lab1.InfoTrain.Entities;
 using Xunit;
 
 namespace Lab1.Tests;
