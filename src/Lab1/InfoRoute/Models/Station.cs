@@ -20,6 +20,6 @@ public class Station : IRouteSegment
     public RouteResult Passing(Train train)
     {
         return (train.Speed <= _maxIncomingSpeed) ?
-            new RouteResult(true, _loadingTime) : new RouteResult(false, 0);
+            new RouteResult.Success(_loadingTime) : new RouteResult.StationSpeedLimitFail();
     }
 }

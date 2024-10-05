@@ -8,7 +8,7 @@ namespace Lab1.Tests;
 public class AllTests
 {
     [Fact]
-    public void Test1()
+    public void ShouldPassRoute_WhenRouteLimitAcceptable_ReturnsTrainPassResultSuccess()
     {
         var train = new Train(weight: 100, maxForce: 2000, accuracy: 1);
         var route = new Route(speedLimit: 50);
@@ -18,11 +18,11 @@ public class AllTests
 
         RouteResult result = route.Simulate(train);
 
-        Assert.True(result.Success);
+        Assert.IsType<RouteResult.Success>(result);
     }
 
     [Fact]
-    public void Test2()
+    public void ShouldPassRoute_WhenRouteLimitNotAcceptable_ReturnsTrainPassResultFailure()
     {
         var train = new Train(weight: 100, maxForce: 2000, accuracy: 1);
         var route = new Route(speedLimit: 50);
@@ -32,11 +32,11 @@ public class AllTests
 
         RouteResult result = route.Simulate(train);
 
-        Assert.False(result.Success);
+        Assert.IsType<RouteResult.RouteSpeedLimitFail>(result);
     }
 
     [Fact]
-    public void Test3()
+    public void ShouldPassRoute_WhenStationAndRouteLimitAcceptable_ReturnsTrainPassResultSucces()
     {
         var train = new Train(weight: 100, maxForce: 2000, accuracy: 1);
         var route = new Route(speedLimit: 100);
@@ -48,11 +48,11 @@ public class AllTests
 
         RouteResult result = route.Simulate(train);
 
-        Assert.True(result.Success);
+        Assert.IsType<RouteResult.Success>(result);
     }
 
     [Fact]
-    public void Test4()
+    public void ShouldFailStationLimit_WhenStationLimitNotAcceptable_ReturnsTrainPassResultFailure()
     {
         var train = new Train(weight: 100, maxForce: 2000, accuracy: 1);
         var route = new Route(speedLimit: 100);
@@ -63,11 +63,11 @@ public class AllTests
 
         RouteResult result = route.Simulate(train);
 
-        Assert.False(result.Success);
+        Assert.IsType<RouteResult.StationSpeedLimitFail>(result);
     }
 
     [Fact]
-    public void Test5()
+    public void ShouldPassStationAndFailRouteLimit_WhenStationLimitAcceptableAndRouteLimitNotAcceptable_ReturnsTrainPassResultFailure()
     {
         var train = new Train(weight: 100, maxForce: 2000, accuracy: 1);
         var route = new Route(speedLimit: 90);
@@ -79,11 +79,11 @@ public class AllTests
 
         RouteResult result = route.Simulate(train);
 
-        Assert.False(result.Success);
+        Assert.IsType<RouteResult.RouteSpeedLimitFail>(result);
     }
 
     [Fact]
-    public void Test6()
+    public void ShouldPassStationAndRouteLimit_WhenSpeedAboveLimitButSlowsDownToAcceptableSpeed_ReturnsTrainPassResultSucces()
     {
         var train = new Train(weight: 100, maxForce: 2000, accuracy: 1);
         var route = new Route(speedLimit: 50);
@@ -99,11 +99,11 @@ public class AllTests
 
         RouteResult result = route.Simulate(train);
 
-        Assert.True(result.Success);
+        Assert.IsType<RouteResult.Success>(result);
     }
 
     [Fact]
-    public void Test7()
+    public void ShouldFailMagneticRoad_WhenSpeedIsZero_ReturnsTrainPassResultFailure()
     {
         var train = new Train(weight: 100, maxForce: 2000, accuracy: 1);
         var route = new Route(speedLimit: 50);
@@ -112,11 +112,11 @@ public class AllTests
 
         RouteResult result = route.Simulate(train);
 
-        Assert.False(result.Success);
+        Assert.IsType<RouteResult.NotEnoughPower>(result);
     }
 
     [Fact]
-    public void Test8()
+    public void ShouldFailPowerMagneticRoad_WhenSpeedIsNotTooEnoughToPassSlowingDownPowerMagneticRoad_ReturnsTrainPassResultFailure()
     {
         var train = new Train(weight: 100, maxForce: 2000, accuracy: 1);
         var route = new Route(speedLimit: 50);
@@ -126,6 +126,6 @@ public class AllTests
 
         RouteResult result = route.Simulate(train);
 
-        Assert.False(result.Success);
+        Assert.IsType<RouteResult.NotEnoughPower>(result);
     }
 }

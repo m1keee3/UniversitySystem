@@ -16,7 +16,7 @@ public class Train
 
     public Train(double weight, double maxForce, double accuracy)
     {
-        if (weight < 0) throw new ArgumentException("Weight cannot be negative", nameof(weight));
+        if (weight <= 0) throw new ArgumentException("Weight must be greater than 0", nameof(weight));
         if (_maxForce < 0) throw new ArgumentException("MaxForce cannot be negative", nameof(maxForce));
         if (accuracy < 0) throw new ArgumentException("Accuracy cannot be negative", nameof(accuracy));
 
@@ -30,7 +30,7 @@ public class Train
     public RouteResult RunRoad(double length)
     {
         double time = 0;
-        if (_boost == 0 && Speed == 0) return new RouteResult(false, 0);
+        if (_boost == 0 && Speed == 0) return new RouteResult.NotEnoughPower();
         while (length > 0 && Speed >= 0)
         {
             Speed += _boost * _accuracy;
@@ -40,7 +40,7 @@ public class Train
 
         _boost = 0;
         return Speed >= 0 ?
-            new RouteResult(true, time) : new RouteResult(false, 0);
+            new RouteResult.Success(time) : new RouteResult.NotEnoughPower();
     }
 
     public bool ApplyForce(double force)

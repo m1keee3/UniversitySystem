@@ -26,12 +26,11 @@ public class Route
         foreach (IRouteSegment section in _sections)
         {
             RouteResult result = section.Passing(train);
-            if (!result.Success) return new RouteResult(false, 0);
-
-            timeSum += result.Time;
+            if (result is RouteResult.Success succes) timeSum += succes.Time;
+            else return result;
         }
 
         return train.Speed <= _speedLimit ?
-            new RouteResult(true, timeSum) : new RouteResult(false, 0);
+            new RouteResult.Success(timeSum) : new RouteResult.RouteSpeedLimitFail();
     }
 }

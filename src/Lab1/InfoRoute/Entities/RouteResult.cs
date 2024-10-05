@@ -1,8 +1,14 @@
 ﻿namespace Itmo.ObjectOrientedProgramming.Lab1.InfoRoute.Entities;
 
-public class RouteResult(bool success, double time)
+public abstract record RouteResult
 {
-    public bool Success { get; } = success;
+    private RouteResult() { }
 
-    public double Time { get; } = time;
+    public sealed record Success(double Time) : RouteResult;
+
+    public sealed record StationSpeedLimitFail() : RouteResult;
+
+    public sealed record RouteSpeedLimitFail() : RouteResult;
+
+    public sealed record NotEnoughPower() : RouteResult;
 }
