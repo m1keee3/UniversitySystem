@@ -1,7 +1,7 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab2.Entities.Subjects;
+using Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
 using Itmo.ObjectOrientedProgramming.Lab2.Users;
-using System.Collections.ObjectModel;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
@@ -22,7 +22,18 @@ public class StudyProgramm : IEntity
         Leader = user;
     }
 
-    public OperationResult AddSemestr(Collection<Subject> subjects, User user)
+    public OperationResult SetName(string newName, User user)
+    {
+        if (user.Id == Leader.Id)
+        {
+            Name = newName;
+            return new OperationResult.Success();
+        }
+
+        return new OperationResult.AuthorFault();
+    }
+
+    public OperationResult AddSemestr(SubjectRepository subjects, User user)
     {
         if (user.Id == Leader.Id)
         {
@@ -46,9 +57,9 @@ public class StudyProgramm : IEntity
 
     private class Semestr
     {
-        private readonly Collection<Subject> _subjects;
+        private readonly SubjectRepository _subjects;
 
-        public Semestr(Collection<Subject> subjects)
+        public Semestr(SubjectRepository subjects)
         {
             _subjects = subjects;
         }

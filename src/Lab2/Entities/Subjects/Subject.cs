@@ -1,6 +1,6 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
+﻿using Itmo.ObjectOrientedProgramming.Lab2.Repositories;
+using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
 using Itmo.ObjectOrientedProgramming.Lab2.Users;
-using System.Collections.ObjectModel;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities.Subjects;
 
@@ -14,7 +14,7 @@ public abstract class Subject
 
     public int BasedOnId { get; } = 0;
 
-    private Collection<IEntity> _lectures = new();
+    private LecturesRepository _lectures = new();
 
     protected Subject(int id, string name, User user)
     {
@@ -31,7 +31,7 @@ public abstract class Subject
         BasedOnId = basedOnId;
     }
 
-    public abstract OperationResult SetLabWorks(Collection<IEntity> labwork);
+    public abstract OperationResult SetLabWorks(LabWorkRepository labwork);
 
     public abstract OperationResult AddLabWorks(LabWork labwork);
 
@@ -46,7 +46,7 @@ public abstract class Subject
         return new OperationResult.AuthorFault();
     }
 
-    public OperationResult SetLectures(Collection<IEntity> newLectures, User user)
+    public OperationResult SetLectures(LecturesRepository newLectures, User user)
     {
         if (user.Id == Author.Id)
         {
@@ -57,9 +57,9 @@ public abstract class Subject
         return new OperationResult.AuthorFault();
     }
 
-    public OperationResult AddLecture(IEntity newLectures)
+    public OperationResult AddLecture(Lecture newLecture)
     {
-        _lectures.Add(newLectures);
+        _lectures.Add(newLecture);
         return new OperationResult.Success();
     }
 

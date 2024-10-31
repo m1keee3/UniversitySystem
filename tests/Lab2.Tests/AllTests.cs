@@ -1,5 +1,4 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab2.Entities;
-using Itmo.ObjectOrientedProgramming.Lab2.Entities.Builders;
 using Itmo.ObjectOrientedProgramming.Lab2.Entities.Subjects;
 using Itmo.ObjectOrientedProgramming.Lab2.Factories;
 using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
@@ -15,7 +14,7 @@ public class AllTests
     {
         var user1 = new User(1, "Mike");
         var user2 = new User(2, "Not Mike");
-        var labBuilder = new LabWorkBuilder();
+        var labBuilder = new LabWork.LabWorkBuilder();
         labBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
         LabWork labWork = labBuilder.Build();
 
@@ -35,7 +34,7 @@ public class AllTests
     {
         var user1 = new User(1, "Mike");
         var user2 = new User(2, "Not Mike");
-        var lectureBuilder = new LectureBuilder();
+        var lectureBuilder = new Lecture.LectureBuilder();
         lectureBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetData(" ").SetBasedOnId(10);
         Lecture lecture = lectureBuilder.Build();
 
@@ -62,11 +61,35 @@ public class AllTests
     }
 
     [Fact]
-    public void CopyingLabWork_ShouldBeEqualBasedOnIdOfCopyAndOriginId()
+    public void TruingChangeTestSubjectByNotAuthor_ShouldReturnAuthorFault()
     {
         var user1 = new User(1, "Mike");
         var user2 = new User(2, "Not Mike");
-        var labBuilder = new LabWorkBuilder();
+        var testSubjectFactory = new TestSubjectFactory();
+        Subject math = testSubjectFactory.CreateSubject(1, "Math", user1, 100);
+
+        OperationResult result1 = math.SetName("0_0", user2);
+
+        Assert.IsType<OperationResult.AuthorFault>(result1);
+    }
+
+    [Fact]
+    public void TruingChangeStudyProgrammByNotAuthor_ShouldReturnAuthorFault()
+    {
+        var user1 = new User(1, "Mike");
+        var user2 = new User(2, "Not Mike");
+        var studyProgramm = new StudyProgramm(1, "Programming", user1);
+
+        OperationResult result1 = studyProgramm.SetName("0_0", user2);
+
+        Assert.IsType<OperationResult.AuthorFault>(result1);
+    }
+
+    [Fact]
+    public void CopyingLabWork_ShouldBeEqualBasedOnIdOfCopyAndOriginId()
+    {
+        var user1 = new User(1, "Mike");
+        var labBuilder = new LabWork.LabWorkBuilder();
         labBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
         LabWork labWork = labBuilder.Build();
         LabWork labWorkCopy = labWork.Clone();
@@ -78,8 +101,7 @@ public class AllTests
     public void CopyingLectureWork_ShouldBeEqualBasedOnIdOfCopyAndOriginId()
     {
         var user1 = new User(1, "Mike");
-        var user2 = new User(2, "Not Mike");
-        var lectureBuilder = new LectureBuilder();
+        var lectureBuilder = new Lecture.LectureBuilder();
         lectureBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetData(" ");
         Lecture lecture = lectureBuilder.Build();
         Lecture lectureCopy = lecture.Clone();
@@ -91,7 +113,6 @@ public class AllTests
     public void CopyingExamSubjectFactoryWork_ShouldBeEqualBasedOnIdOfCopyAndOriginId()
     {
         var user1 = new User(1, "Mike");
-        var user2 = new User(2, "Not Mike");
         var examSubjectFactory = new ExamSubjectFactory();
         Subject math = examSubjectFactory.CreateSubject(1, "Math", user1, 100);
         Subject mathCopy = math.Clone();
@@ -103,7 +124,6 @@ public class AllTests
     public void CopyingTestSubjectFactoryWork_ShouldBeEqualBasedOnIdOfCopyAndOriginId()
     {
         var user1 = new User(1, "Mike");
-        var user2 = new User(2, "Not Mike");
         var testSubjectFactory = new TestSubjectFactory();
         Subject math = testSubjectFactory.CreateSubject(1, "Math", user1, 60);
         Subject mathCopy = math.Clone();
@@ -112,12 +132,27 @@ public class AllTests
     }
 
     [Fact]
-    public void AddLabworkSoPointsAreOver100_ShouldReturnPointsFault()
+    public void AddLabworkInExamSubjectSoPointsAreOver100_ShouldReturnPointsFault()
     {
         var user1 = new User(1, "Mike");
         var examSubjectFactory = new ExamSubjectFactory();
         Subject math = examSubjectFactory.CreateSubject(1, "Math", user1, 100);
-        var labBuilder = new LabWorkBuilder();
+        var labBuilder = new LabWork.LabWorkBuilder();
+        labBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
+        LabWork labWork = labBuilder.Build();
+
+        OperationResult result = math.AddLabWorks(labWork);
+
+        Assert.IsType<OperationResult.PointsFault>(result);
+    }
+
+    [Fact]
+    public void AddLabworkInTestSubjectSoPointsAreLessThan100_ShouldReturnPointsFault()
+    {
+        var user1 = new User(1, "Mike");
+        var testSubjectFactory = new TestSubjectFactory();
+        Subject math = testSubjectFactory.CreateSubject(1, "Math", user1, 60);
+        var labBuilder = new LabWork.LabWorkBuilder();
         labBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
         LabWork labWork = labBuilder.Build();
 

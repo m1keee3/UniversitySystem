@@ -1,20 +1,22 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab2.Entities;
+using System.Collections.ObjectModel;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
 public class LabWorkRepository : IRepository<LabWork>
 {
-    private readonly List<IEntity> labWorks = new();
+    public Collection<IEntity> LabWorks { get; } = new();
 
     public void Add(LabWork entity)
     {
-        labWorks.Add(entity);
+        LabWorks.Add(entity);
     }
 
     public LabWork? SearchId(int id)
     {
-        foreach (LabWork labWork in labWorks)
+        foreach (IEntity entity in LabWorks)
         {
+            var labWork = (LabWork)entity;
             if (labWork.Id == id) return labWork;
         }
 
