@@ -11,7 +11,7 @@ public class SubjectRepository : IRepository<Subject>
         _lectures.Add(entity);
     }
 
-    public Subject? SearchId(int id)
+    public Subject? SearchId(Guid id)
     {
         foreach (Subject lecture in _lectures)
         {

@@ -3,9 +3,9 @@ using Itmo.ObjectOrientedProgramming.Lab2.Users;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class Lecture : IEntity
+public class Lecture : IEntity, IPrototype<Lecture>
 {
-    public int Id { get; }
+    public Guid? Id { get; }
 
     public string Name { get; private set; }
 
@@ -15,30 +15,16 @@ public class Lecture : IEntity
 
     public string Data { get; private set; }
 
-    public int BasedOnId { get; } = 0;
+    public Guid? BasedOnId { get; }
 
-    private Lecture(int id, string name, User user, string description, string data)
+    private Lecture(string name, User user, string description, string data, Guid? basedOnId = null)
     {
-        Id = id;
-        Name = name;
-        Author = user;
-        Description = description;
-        Data = data;
-    }
-
-    private Lecture(int id, string name, User user, string description, string data, int basedOnId)
-    {
-        Id = id;
+        Id = Guid.NewGuid();
         Name = name;
         Author = user;
         Description = description;
         Data = data;
         BasedOnId = basedOnId;
-    }
-
-    public Lecture Clone()
-    {
-        return new Lecture(Id, Name, Author, Description, Data, BasedOnId == 0 ? Id : BasedOnId);
     }
 
     public OperationResult SetName(string newName, User user)
@@ -76,18 +62,11 @@ public class Lecture : IEntity
 
     public class LectureBuilder
     {
-        private int _id;
         private string? _name;
         private User? _author;
         private string? _description;
         private string? _data;
-        private int _basedOnId;
-
-        public LectureBuilder SetId(int id)
-        {
-            _id = id;
-            return this;
-        }
+        private Guid? _basedOnId;
 
         public LectureBuilder SetName(string name)
         {
@@ -113,9 +92,9 @@ public class Lecture : IEntity
            return this;
         }
 
-        public LectureBuilder SetBasedOnId(int points)
+        public LectureBuilder SetBasedOnId(Guid? id)
         {
-            _basedOnId = points;
+            _basedOnId = id;
             return this;
         }
 
@@ -129,8 +108,12 @@ public class Lecture : IEntity
 
             if (_data == null) throw new ArgumentException("EvaluationCriteria cannot be null.", nameof(_data));
 
-            if (_basedOnId != 0) return new Lecture(_id, _name, _author, _description, _data, _basedOnId);
-            return new Lecture(_id, _name, _author, _description, _data);
+            return new Lecture(_name, _author, _description, _data, _basedOnId);
         }
+    }
+
+    public Lecture Clone()
+    {
+        return new Lecture(Name, Author, Description, Data, Id);
     }
 }

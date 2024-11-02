@@ -12,7 +12,7 @@ public class LecturesRepository : IRepository<Lecture>
         Lectures.Add(entity);
     }
 
-    public Lecture? SearchId(int id)
+    public Lecture? SearchId(Guid id)
     {
         foreach (IEntity entity in Lectures)
         {

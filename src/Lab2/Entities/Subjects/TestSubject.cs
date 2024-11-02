@@ -4,21 +4,16 @@ using Itmo.ObjectOrientedProgramming.Lab2.Users;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities.Subjects;
 
-public class TestSubject : Subject
+public class TestSubject : Subject, IPrototype<TestSubject>
 {
-    private TestSubject(int id, string name, User user, int points) : base(id, name, user)
+    private TestSubject(string name, User user, int points, Guid? basedOnId) : base(name, user, basedOnId)
     {
         TestPoints = points;
     }
 
-    private TestSubject(int id, string name, User user, int points, int basedOnId) : base(id, name, user, basedOnId)
+    public TestSubject Clone()
     {
-        TestPoints = points;
-    }
-
-    public override Subject Clone()
-    {
-        return new TestSubject(Id, Name, Author, TestPoints, BasedOnId == 0 ? Id : BasedOnId);
+        return new TestSubject(Name, Author, TestPoints, Id);
     }
 
     public int TestPoints { get; private set; }
@@ -71,17 +66,10 @@ public class TestSubject : Subject
 
     public class TestSubjectBuilder
     {
-        private int _id;
         private string? _name;
         private User? _author;
         private int _testPoints;
-        private int _basedOnId = 0;
-
-        public TestSubjectBuilder SetId(int id)
-        {
-            _id = id;
-            return this;
-        }
+        private Guid? _basedOnId;
 
         public TestSubjectBuilder SetName(string name)
         {
@@ -101,7 +89,7 @@ public class TestSubject : Subject
             return this;
         }
 
-        public TestSubjectBuilder SetBasedOnId(int id)
+        public TestSubjectBuilder SetBasedOnId(Guid? id)
         {
             _basedOnId = id;
             return this;
@@ -113,9 +101,7 @@ public class TestSubject : Subject
 
             if (_author == null) throw new ArgumentException("Author cannot be null.", nameof(_author));
 
-            if (_basedOnId != 0) return new TestSubject(_id, _name, _author, _testPoints, _basedOnId);
-
-            return new TestSubject(_id, _name, _author, _testPoints);
+            return new TestSubject(_name, _author, _testPoints, _basedOnId);
         }
     }
 }

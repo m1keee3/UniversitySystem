@@ -3,9 +3,9 @@ using Itmo.ObjectOrientedProgramming.Lab2.Users;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
-public class LabWork : IEntity
+public class LabWork : IEntity, IPrototype<LabWork>
 {
-    public int Id { get; }
+    public Guid Id { get; }
 
     public string Name { get; private set; }
 
@@ -17,32 +17,17 @@ public class LabWork : IEntity
 
     public int Points { get; private set; }
 
-    public int BasedOnId { get; } = 0;
+    public Guid? BasedOnId { get; }
 
-    private LabWork(int id, string name, User user, string description, string evaluationCriteria, int points)
+    private LabWork(string name, User user, string description, string evaluationCriteria, int points, Guid? basedOnId = null)
     {
-        Id = id;
-        Name = name;
-        Author = user;
-        Description = description;
-        EvaluationCriteria = evaluationCriteria;
-        Points = points;
-    }
-
-    private LabWork(int id, string name, User user, string description, string evaluationCriteria, int points, int basedOnId)
-    {
-        Id = id;
+        Id = Guid.NewGuid();
         Name = name;
         Author = user;
         Description = description;
         EvaluationCriteria = evaluationCriteria;
         Points = points;
         BasedOnId = basedOnId;
-    }
-
-    public LabWork Clone()
-    {
-        return new LabWork(Id, Name, Author, Description, EvaluationCriteria, Points, BasedOnId == 0 ? Id : BasedOnId);
     }
 
     public OperationResult SetName(string newName, User user)
@@ -91,19 +76,12 @@ public class LabWork : IEntity
 
     public class LabWorkBuilder
     {
-        private int _id;
         private string? _name;
         private User? _author;
         private string? _description;
         private string? _evaluationCriteria;
         private int _points;
-        private int _basedOnId = 0;
-
-        public LabWorkBuilder SetId(int id)
-        {
-            _id = id;
-            return this;
-        }
+        private Guid? _basedOnId;
 
         public LabWorkBuilder SetName(string name)
         {
@@ -135,7 +113,7 @@ public class LabWork : IEntity
             return this;
         }
 
-        public LabWorkBuilder SetBasedOnId(int basedOnId)
+        public LabWorkBuilder SetBasedOnId(Guid basedOnId)
         {
             _basedOnId = basedOnId;
             return this;
@@ -151,9 +129,12 @@ public class LabWork : IEntity
 
             if (_evaluationCriteria == null) throw new ArgumentException("EvaluationCriteria cannot be null.", nameof(_evaluationCriteria));
 
-            if (_basedOnId != 0) return new LabWork(_id, _name, _author, _description, _evaluationCriteria, _points, _basedOnId);
-
-            return new LabWork(_id, _name, _author, _description, _evaluationCriteria, _points);
+            return new LabWork(_name, _author, _description, _evaluationCriteria, _points, _basedOnId);
         }
+    }
+
+    public LabWork Clone()
+    {
+        return new LabWork(Name, Author, Description, EvaluationCriteria, Points, Id);
     }
 }

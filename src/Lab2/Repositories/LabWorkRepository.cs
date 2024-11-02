@@ -12,7 +12,7 @@ public class LabWorkRepository : IRepository<LabWork>
         LabWorks.Add(entity);
     }
 
-    public LabWork? SearchId(int id)
+    public LabWork? SearchId(Guid id)
     {
         foreach (IEntity entity in LabWorks)
         {

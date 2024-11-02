@@ -4,25 +4,20 @@ using Itmo.ObjectOrientedProgramming.Lab2.Users;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Entities.Subjects;
 
-public class ExamSubject : Subject
+public class ExamSubject : Subject, IPrototype<ExamSubject>
 {
     public int ExamPoints { get; private set; }
 
     private LabWorkRepository _labworks = new();
 
-    private ExamSubject(int id, string name, User user, int examPoints) : base(id, name, user)
+    private ExamSubject(string name, User user, int examPoints, Guid? basedOnId = null) : base(name, user, basedOnId)
     {
         ExamPoints = examPoints;
     }
 
-    private ExamSubject(int id, string name, User user, int examPoints, int basedOnId) : base(id, name, user, basedOnId)
+    public ExamSubject Clone()
     {
-        ExamPoints = examPoints;
-    }
-
-    public override Subject Clone()
-    {
-        return new ExamSubject(Id, Name, Author, ExamPoints, BasedOnId == 0 ? Id : BasedOnId);
+        return new ExamSubject(Name, Author, ExamPoints, Id);
     }
 
     public OperationResult SetExamPoints(int points, User user)
@@ -71,17 +66,10 @@ public class ExamSubject : Subject
 
     public class ExamSubjectBuilder
     {
-        private int _id;
         private string? _name;
         private User? _author;
         private int _examPoints;
-        private int _basedOnId = 0;
-
-        public ExamSubjectBuilder SetId(int id)
-        {
-            _id = id;
-            return this;
-        }
+        private Guid? _basedOnId;
 
         public ExamSubjectBuilder SetName(string name)
         {
@@ -101,7 +89,7 @@ public class ExamSubject : Subject
             return this;
         }
 
-        public ExamSubjectBuilder SetBasedOnId(int id)
+        public ExamSubjectBuilder SetBasedOnId(Guid? id)
         {
             _basedOnId = id;
             return this;
@@ -113,9 +101,7 @@ public class ExamSubject : Subject
 
             if (_author == null) throw new ArgumentException("Author cannot be null.", nameof(_author));
 
-            if (_basedOnId != 0) return new ExamSubject(_id, _name, _author, _examPoints, _basedOnId);
-
-            return new ExamSubject(_id, _name, _author, _examPoints);
+            return new ExamSubject(_name, _author, _examPoints, _basedOnId);
         }
     }
 }

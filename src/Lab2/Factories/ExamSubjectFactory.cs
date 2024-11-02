@@ -5,10 +5,9 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Factories;
 
 public class ExamSubjectFactory : ISubjectFactory
 {
-    public Subject CreateSubject(int id, string name, User author, int points, int basedOnId = 0)
+    public Subject CreateSubject(int id, string name, User author, int points, Guid? basedOnId = null)
     {
         ExamSubject.ExamSubjectBuilder builder = new ExamSubject.ExamSubjectBuilder()
-            .SetId(id)
             .SetName(name)
             .SetAuthor(author)
             .SetExamPoints(points)

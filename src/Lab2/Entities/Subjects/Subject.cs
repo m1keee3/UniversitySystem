@@ -6,26 +6,19 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Entities.Subjects;
 
 public abstract class Subject
 {
-    public int Id { get; }
+    public Guid Id { get; }
 
     public string Name { get; private set; }
 
     public User Author { get; }
 
-    public int BasedOnId { get; } = 0;
+    public Guid? BasedOnId { get; }
 
     private LecturesRepository _lectures = new();
 
-    protected Subject(int id, string name, User user)
+    protected Subject(string name, User user, Guid? basedOnId = null)
     {
-        Id = id;
-        Name = name;
-        Author = user;
-    }
-
-    protected Subject(int id, string name, User user, int basedOnId)
-    {
-        Id = id;
+        Id = Guid.NewGuid();
         Name = name;
         Author = user;
         BasedOnId = basedOnId;
@@ -62,6 +55,4 @@ public abstract class Subject
         _lectures.Add(newLecture);
         return new OperationResult.Success();
     }
-
-    public abstract Subject Clone();
 }

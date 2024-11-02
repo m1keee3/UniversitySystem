@@ -15,7 +15,7 @@ public class AllTests
         var user1 = new User(1, "Mike");
         var user2 = new User(2, "Not Mike");
         var labBuilder = new LabWork.LabWorkBuilder();
-        labBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
+        labBuilder.SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
         LabWork labWork = labBuilder.Build();
 
         OperationResult result1 = labWork.SetName("0_0", user2);
@@ -35,7 +35,7 @@ public class AllTests
         var user1 = new User(1, "Mike");
         var user2 = new User(2, "Not Mike");
         var lectureBuilder = new Lecture.LectureBuilder();
-        lectureBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetData(" ").SetBasedOnId(10);
+        lectureBuilder.SetName("lab1").SetAuthor(user1).SetDescription(" ").SetData(" ");
         Lecture lecture = lectureBuilder.Build();
 
         OperationResult result1 = lecture.SetName("0_0", user2);
@@ -90,7 +90,7 @@ public class AllTests
     {
         var user1 = new User(1, "Mike");
         var labBuilder = new LabWork.LabWorkBuilder();
-        labBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
+        labBuilder.SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
         LabWork labWork = labBuilder.Build();
         LabWork labWorkCopy = labWork.Clone();
 
@@ -102,7 +102,7 @@ public class AllTests
     {
         var user1 = new User(1, "Mike");
         var lectureBuilder = new Lecture.LectureBuilder();
-        lectureBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetData(" ");
+        lectureBuilder.SetName("lab1").SetAuthor(user1).SetDescription(" ").SetData(" ");
         Lecture lecture = lectureBuilder.Build();
         Lecture lectureCopy = lecture.Clone();
 
@@ -114,8 +114,8 @@ public class AllTests
     {
         var user1 = new User(1, "Mike");
         var examSubjectFactory = new ExamSubjectFactory();
-        Subject math = examSubjectFactory.CreateSubject(1, "Math", user1, 100);
-        Subject mathCopy = math.Clone();
+        var math = (ExamSubject)examSubjectFactory.CreateSubject(1, "Math", user1, 100);
+        ExamSubject mathCopy = math.Clone();
 
         Assert.True(mathCopy.BasedOnId == math.Id);
     }
@@ -125,8 +125,8 @@ public class AllTests
     {
         var user1 = new User(1, "Mike");
         var testSubjectFactory = new TestSubjectFactory();
-        Subject math = testSubjectFactory.CreateSubject(1, "Math", user1, 60);
-        Subject mathCopy = math.Clone();
+        var math = (TestSubject)testSubjectFactory.CreateSubject(1, "Math", user1, 60);
+        TestSubject mathCopy = math.Clone();
 
         Assert.True(mathCopy.BasedOnId == math.Id);
     }
@@ -138,7 +138,7 @@ public class AllTests
         var examSubjectFactory = new ExamSubjectFactory();
         Subject math = examSubjectFactory.CreateSubject(1, "Math", user1, 100);
         var labBuilder = new LabWork.LabWorkBuilder();
-        labBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
+        labBuilder.SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
         LabWork labWork = labBuilder.Build();
 
         OperationResult result = math.AddLabWorks(labWork);
@@ -153,7 +153,7 @@ public class AllTests
         var testSubjectFactory = new TestSubjectFactory();
         Subject math = testSubjectFactory.CreateSubject(1, "Math", user1, 60);
         var labBuilder = new LabWork.LabWorkBuilder();
-        labBuilder.SetId(1).SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
+        labBuilder.SetName("lab1").SetAuthor(user1).SetDescription(" ").SetEvaluationCriteria(" ").SetPoints(10);
         LabWork labWork = labBuilder.Build();
 
         OperationResult result = math.AddLabWorks(labWork);

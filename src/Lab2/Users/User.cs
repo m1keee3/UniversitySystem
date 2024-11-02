@@ -2,13 +2,13 @@
 
 public class User
 {
-    public int Id { get; private set; }
+    public Guid Id { get; private set; }
 
     public string Name { get; private set; }
 
     public User(int id, string name)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         Name = name;
     }
 }

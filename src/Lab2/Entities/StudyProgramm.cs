@@ -7,7 +7,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Entities;
 
 public class StudyProgramm : IEntity
 {
-    public int Id { get; }
+    public Guid Id { get; }
 
     public string Name { get; private set; }
 
@@ -17,7 +17,7 @@ public class StudyProgramm : IEntity
 
     public StudyProgramm(int id, string name, User user)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         Name = name;
         Leader = user;
     }
@@ -33,11 +33,16 @@ public class StudyProgramm : IEntity
         return new OperationResult.AuthorFault();
     }
 
+    public Semestr GetSemestr(int semNum)
+    {
+        return _semestrs[semNum];
+    }
+
     public OperationResult AddSemestr(SubjectRepository subjects, User user)
     {
         if (user.Id == Leader.Id)
         {
-            _semestrs.Add(new Semestr(subjects));
+            _semestrs.Add(new Semestr(subjects)); // Creator
             return new OperationResult.Success();
         }
 
@@ -55,7 +60,7 @@ public class StudyProgramm : IEntity
         return new OperationResult.AuthorFault();
     }
 
-    private class Semestr
+    public class Semestr
     {
         private readonly SubjectRepository _subjects;
 
